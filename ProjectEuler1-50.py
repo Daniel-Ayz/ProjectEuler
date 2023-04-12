@@ -1,7 +1,11 @@
 import re
-from itertools import permutations
+import time
+from itertools import permutations, combinations
 import math
 import functools
+
+import sympy
+from sympy import primerange
 from sympy.ntheory import factorint
 import inflect
 import urllib.request
@@ -483,7 +487,26 @@ from fractions import Fraction
 # max_length = reduce(func, range(1, 1000), (0, 0))
 # print(max_length[1])
 
-# Problem 27 - Dumb way (long)
+
+# Problem 27
+# formula: n**2 + a*n + b; -1000<a,b<=1000
+#
+# LOW_RANGE = -999
+# UP_RANGE = 1000
+# max_streak = 0
+# product = 0
+# for a in range(LOW_RANGE, UP_RANGE):
+#     for b in range(LOW_RANGE, UP_RANGE + 1):
+#         n = 0
+#         while sympy.ntheory.isprime(n**2 + a*n + b):
+#             n += 1
+#         if n > max_streak:
+#             max_streak = n
+#             product = a * b
+# print(product)
+
+
+# Problem 28 - Dumb way (long)
 # def print_matrix(matrix):
 #     for row in matrix:
 #         for slot in row:
@@ -811,3 +834,138 @@ from fractions import Fraction
 #     if val in t_nums:
 #         count += 1
 # print(count)
+
+# Problem 43
+# primes = [2, 3, 5, 7, 11, 13, 17]
+#
+#
+# def special_property(number: str) -> bool:
+#     for i in range(1, 8):
+#         if int(number[i:i+3]) % primes[i - 1] != 0:
+#             return False
+#     return True
+#
+#
+# sum_pan_special = 0
+# for t in permutations("0123456789"):
+#     num = ''.join(t)
+#     if special_property(num):
+#         sum_pan_special += int(num)
+#
+# print(sum_pan_special)
+
+
+# Problem 44
+# minimum = math.inf
+# pentagonal = set(i*(3*i-1)//2 for i in range(1, 10000))
+# pairs = set(combinations(pentagonal, 2))
+# for t in pairs:
+#     if t[0] + t[1] in pentagonal and abs(t[0] - t[1]) in pentagonal:
+#         minimum = min(minimum, abs(t[0] - t[1]))
+#
+# print(minimum)
+
+# Problem 45
+
+# triangle = (i*(i+1)//2 for i in range(100000))
+# pentagonal = (i*(3*i-1)//2 for i in range(100000))
+# hexagonal = (i*(2*i-1) for i in range(100000))
+# d = {}
+# while True:
+#     try:
+#         t = next(triangle)
+#         p = next(pentagonal)
+#         h = next(hexagonal)
+#     except StopIteration:
+#         break
+#
+#     d[t] = d.get(t, 0) + 1
+#     d[p] = d.get(p, 0) + 1
+#     d[h] = d.get(h, 0) + 1
+#
+#     if d[t] == 3:
+#         print(t)
+#     if d[p] == 3:
+#         print(p)
+#     if d[p] == 3:
+#         print(p)
+
+# Problem 46
+# generated = set()
+# primes = set(primerange(2, 10000))
+# for exp in range(1, 10000):
+#     for prime in primes:
+#         number = int(prime + 2*(exp**2))
+#         generated.add(number)
+# for i in range(9, 10000, 2):
+#     if i not in generated and i not in primes:
+#         print(i)
+#         break
+
+# Problem 47
+# streak = 0
+# for number in range(1000000):
+#     if len(factorint(number)) == 4:
+#         streak += 1
+#     else:
+#         streak = 0
+#     if streak == 4:
+#         print(number - 3)
+#         break
+
+# Problem 48
+# print(str(sum(i**i for i in range(1, 1000)))[-10:])
+
+# Problem 49
+# def is_perm(*numbers: str) -> bool:
+#     for i in range(len(numbers)-1):
+#         if not is_perm2(numbers[i], numbers[i+1]):
+#             return False
+#     return True
+#
+#
+# def is_perm2(a: str, b: str) -> bool:
+#     count_a = [0 for i in range(10)]
+#     count_b = [0 for i in range(10)]
+#     for d in a:
+#         count_a[int(d)] += 1
+#     for d in b:
+#         count_b[int(d)] += 1
+#     return count_a == count_b
+#
+#
+# a = 1488
+# b = a + 3330
+# c = b + 3330
+# while not(sympy.ntheory.isprime(a) and sympy.ntheory.isprime(b) and sympy.isprime(c) and is_perm(str(a), str(b), str(c))):
+#     a += 1
+#     b += 1
+#     c += 1
+# print(a, b, c, sep="")
+
+# Problem 50
+
+# LIMIT = 1000000
+# primes = primerange(LIMIT)
+# n_prime = next(primes)
+# number = 0
+# while number + n_prime < LIMIT:
+#     number += n_prime
+#     n_prime = next(primes)
+# remove_primes_up = primerange(0, n_prime)
+# remove_primes_down = reversed(list(primerange(0, n_prime)))
+# number_copy = number
+# count_copy = 0
+# while not sympy.ntheory.isprime(number_copy):
+#     number_copy = number_copy - next(remove_primes_up)
+#     count_copy += 1
+# count = 0
+# while not sympy.ntheory.isprime(number):
+#     number = number - next(remove_primes_down)
+#     count += 1
+#
+# if count < count_copy:
+#     print(number)
+# else:
+#     print(number_copy)
+
